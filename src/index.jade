@@ -24,11 +24,11 @@ html
       section
         h2
           span React is a 
-          em library 
+          em view library 
           span that implements...
         ul
-          li a virtual dom
-          li a dom diffing and patching algorithm
+          li a virtual DOM
+          li a DOM diffing and patching algorithm
 
       section
         h2 to achieve
@@ -70,16 +70,38 @@ html
             em adapt
 
       section
-        h2 Bullet List
-        h3.bullet Powered by <a href="https://github.com/markdalgleish/bespoke-bullets">bespoke-bullets</a>
+        h2 How does React tacle that?
         ul
-          li Bullet 1
-          li Bullet 2
-          li Bullet 3
+          li
+            span Cohesive, composable 
+            em components
+          li
+            em Stateless
+            span , 
+            em pure 
+            span render functions
+            ul
+              li
+                span Input: 
+                em state
+                span , 
+                em properties
+              li
+                span Output: 
+                em virtual DOM elements
 
       section
-        h2 Syntax Highlighting
-        h3 Powered by <a href="http://twitter.com/LeaVerou">Lea Verou</a>'s <a href="https://github.com/LeaVerou/prism">Prism</a>
+        .mermaid.
+          graph LR
+            classDef default stroke:#728DA5,stroke-width:2px;
+            linkStyle defaulDEFAULTt stroke:#728DA5,stroke-width:2px;
+            subgraph Model
+              model1(State 1)
+              model2(State 2)
+              model1-->model2
+            end
+
+      section
         pre.line-numbers
           code.language-coffeescript.
             bespoke.from 'article', [
@@ -88,6 +110,8 @@ html
               touch(),
               bullets('li, .bullet')
             ]
+      section
+        h2 template in my js?
 
       section(data-bespoke-hash='named-route')
         h2 Named Route

@@ -34,3 +34,4 @@ require('prism');
 require('prism/components/prism-coffeescript');
 require('prism/plugins/line-numbers/prism-line-numbers');
 
+require('mermaid');
