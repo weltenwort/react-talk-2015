@@ -6,14 +6,17 @@
 
 ## What React _is not_
 
-React _is not_...
+### React _is not_...
 
 * an architecture (like MVC)
+
 * a web framework (like Ember.js)
+
+* a functional reactive programming (FRP) library (like RXJS or bacon.js)
 
 ## What React _is_
 
-React _is_...
+### React _is_...
 
 * a **view library**
 
@@ -22,61 +25,75 @@ React _is_...
 that implements
 
 * a **virtual DOM**
+
 * a **DOM diffing** and **patching** algorithm
 
 # Simplicity
 
-## Cognitive Load
+## Simplicity -- Reducing Cognitive Load
 
 > [...] we should do (as wise programmers aware of our limitations) our utmost
-to **shorten the conceptual gap between the static program and the dynamic
-process**, to make the correspondence between the program (spread out in text
-space) and the process (spread out in time) as trivial as possible. 
+> to **shorten the conceptual gap between the static program and the dynamic
+> process**, to make the correspondence between the program (spread out in text
+> space) and the process (spread out in time) as trivial as possible. 
 
 --- E.W. Dijkstra (1968) "A Case against the GO TO Statement"
 
+
 \note[item]{Our intellectual powers are rather geared to master static relations and that our powers to visualize processes evolving in time are relatively poorly developed. For that reason we should do (as wise programmers aware of our limitations) our utmost to shorten the conceptual gap between the static program and the dynamic process, to make the correspondence between the program (spread out in text space) and the process (spread out in time) as trivial as possible.}
 
+## Simplicity -- Predictability -- Robustness
+
+* less context to keep in mind
+
+    * fewer mistakes
+
+    * fewer bugs
+
+* easier to **learn**
+
+* easier to **adapt**
+
+# Complexity in Web Interfaces
+
+## Why are Web Interfaces Complex
+
+### It's full of **state** and **transitions**:
+
+\tikzset{
+    every node/.style = {
+        node distance = 3cm,
+        font = \sffamily\small,
+        on grid,
+    },
+    block/.style = {
+        rectangle,
+        rounded corners,
+        draw = mDarkTeal,
+        thick,
+    },
+    transition/.style = {
+        ->,
+        dashed,
+        mLightBrown,
+        thick,
+    },
+}
+
+\begin{tikzpicture}[auto]
+    \node (model1) [block] {Model State 1};
+    \node (model2) [block, right of=model1] {Model State 2};
+    \node (model3) [block, right of=model2] {Model State 3};
+
+    \node (view1) [block, below of=model1] {View State 1};
+    \node (view2) [block, right of=view1] {View State 2};
+    \node (view3) [block, right of=view2] {View State 3};
+
+    \draw [transition] (model1) -- (model2);
+    \draw [transition] (model2) -- (model3);
+\end{tikzpicture}
+
 <!--
-      section
-        h2 to achieve
-        ul
-          li
-            em Simplicity
-        h2 through
-        ul
-          li
-            em Robustness
-          li
-            em Predictability
-
-      section
-        h2 The obligatory quote
-        blockquote
-          span [...] we should do (as wise programmers aware of our limitations) our utmost to 
-          em shorten the conceptual gap between the static program and the dynamic process
-          span , to make the correspondence between the program (spread out in text space) and the process (spread out in time) as trivial as possible. 
-        p.citation E.W. Dijkstra (1968) "A Case against the GO TO Statement"
-        aside
-          p obligatory quote
-          blockquote
-            p Our intellectual powers are rather geared to master static relations and that our powers to visualize processes evolving in time are relatively poorly developed. For that reason we should do (as wise programmers aware of our limitations) our utmost to shorten the conceptual gap between the static program and the dynamic process, to make the correspondence between the program (spread out in text space) and the process (spread out in time) as trivial as possible. 
-          p by Dijkstra
-
-      section
-        h2 Why Simplicity
-        ul
-          li less to keep in mind
-          li 
-            span fewer mistakes, 
-            em fewer bugs
-          li
-            span easier to 
-            em learn
-          li 
-            span easier to 
-            em adapt
-
       section
         h2 How does React tacle that?
         ul
