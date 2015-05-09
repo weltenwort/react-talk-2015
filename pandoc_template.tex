@@ -6,6 +6,41 @@
 \usepackage{pgfpages}
 \usetikzlibrary{graphs}
 \usetikzlibrary{positioning}
+\usetikzlibrary{quotes}
+
+\tikzset{
+    every node/.style = {
+        node distance = 2cm and 5cm,
+        text = white,
+        on grid,
+    },
+    block/.style = {
+        rectangle,
+        rounded corners,
+        fill = mDarkTeal,
+        thick,
+        minimum width = 2cm,
+        minimum height = 1.6em,
+        outer sep = .05cm,
+        inner sep = .3em,
+        font = \sffamily\small,
+    },
+    transition/.style = {
+        dashed,
+        mLightBrown,
+        thick,
+    },
+    propagation/.style = {
+        mLightBrown,
+        thick,
+    },
+    invisible/.style={opacity=0},
+    visible on/.style={alt={#1{}{invisible}}},
+    alt/.code args={<#1>#2#3}{%
+        \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+    },
+}
+
 
 %\setbeameroption{show notes on second screen}
 

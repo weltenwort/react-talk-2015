@@ -58,29 +58,6 @@ that implements
 
 ### It's full of **state** and **transitions**
 
-\tikzset{
-    every node/.style = {
-        node distance = 2cm and 5cm,
-        text = white,
-        font = \sffamily\small,
-        on grid,
-    },
-    block/.style = {
-        rectangle,
-        rounded corners,
-        fill = mDarkTeal,
-        thick,
-    },
-    transition/.style = {
-        dashed,
-        mLightBrown,
-        thick,
-    },
-    propagation/.style = {
-        mLightBrown,
-        thick,
-    },
-}
 
 \begin{figure}
     \only<1>{
@@ -153,18 +130,58 @@ that implements
     }
 \end{figure}
 
-<!--\begin{tikzpicture}[auto]-->
-<!--\node (model1) [block] {Model State 1};-->
-<!--\node (model2) [block, right of=model1] {Model State 2};-->
-<!--\node (model3) [block, right of=model2] {Model State 3};-->
+# How can React help?
 
-<!--\node (view1) [block, below of=model1] {View State 1};-->
-<!--\node (view2) [block, right of=view1] {View State 2};-->
-<!--\node (view3) [block, right of=view2] {View State 3};-->
+## React Components
 
-<!--\draw [transition] (model1) -- (model2);-->
-<!--\draw [transition] (model2) -- (model3);-->
-<!--\end{tikzpicture}-->
+\begin{description}[The render() function]
+    \item[State] Internal component state (\emph{which should be minimal})
+    \item[Properties] Externally supplied state
+    \item[The render() function] Turns state and properties into a visual representation
+\end{description}
+
+## The Render Function
+
+\begin{columns}[onlytextwidth]
+    \begin{column}{\textwidth/2}
+        \begin{itemize}
+            \item stateless
+            \item free of side-effects
+        \end{itemize}
+    \end{column}
+    \begin{column}{\textwidth/2}
+        \begin{figure}
+            \begin{tikzpicture}
+                \graph [
+                    grow down = 1.5cm,
+                    branch right = 3cm,
+                    nodes = block,
+                    edges = propagation,
+                    edge quotes = {
+                        black,
+                        auto,
+                    }
+                    ] {
+                    {
+                        "application state" [visible on=<4->];
+                        "component state" [visible on=<4->];
+                    }
+                    ->["signal update", visible on=<4->] {
+                        "properties" [visible on=<2->];
+                        "state" [visible on=<2->];
+                    }
+                    ->["use", visible on=<2->] "render()"
+                    ->["return", visible on=<3->] "virtual DOM fragment" [visible on=<3->]
+                    ->["reconcile", visible on=<5->] "DOM" [visible on=<5->];
+                };
+            \end{tikzpicture}
+        \end{figure}
+    \end{column}
+\end{columns}
+
+## Advantages
+
+
 
 <!--
       section
