@@ -58,7 +58,6 @@ that implements
 
 ### It's full of **state** and **transitions**
 
-
 \begin{figure}
     \only<1>{
     \begin{tikzpicture}[auto]
@@ -232,6 +231,43 @@ Flexible
 
 :   virtual DOM can be rendered to DOM, string, native widgets, etc...
 
+## Positive Effects (2)
+
+* Simpler data flow
+* Just update component properties on model change
+
+\begin{figure}
+    \begin{tikzpicture}[auto]
+        \node (model1) [block] {Model State 1};
+        \node (model2) [block, right=of model1] {Model State 2};
+        \node (model3) [block, right=of model2] {Model State 3};
+
+        \node (viewmodel1) [block, below right=1cm and 2cm of model1] {ViewModel State 1};
+        \node (viewmodel2) [block, below right=1cm and 2cm of model2] {ViewModel State 2};
+        \node (viewmodel3) [block, below right=1cm and 2cm of model3] {ViewModel State 3};
+
+        \node (components1) [block, below=of model1] {React Components};
+        \node (components2) [block, below=of model2] {React Components};
+        \node (components3) [block, below=of model3] {React Components};
+        \graph {
+            (model1) ->[transition] (model2) ->[transition] (model3);
+            (viewmodel1) ->[transition] (viewmodel2) ->[transition] (viewmodel3);
+
+            (model1) ->[propagation] (components1);
+            (model1) ->[propagation] (viewmodel1);
+            (viewmodel1) ->[propagation] (components1);
+
+            (model2) ->[propagation] (components2);
+            (model2) ->[propagation] (viewmodel2);
+            (viewmodel2) ->[propagation] (components2);
+
+            (model3) ->[propagation] (components3);
+            (model3) ->[propagation] (viewmodel3);
+            (viewmodel3) ->[propagation] (components3);
+        };
+    \end{tikzpicture}
+\end{figure}
+
 
 # Examples
 
@@ -251,6 +287,19 @@ class LineNumberColumn extends React.Component
 module.exports = {
     LineNumberColumn
 }
+```
+
+## Rendering Components
+
+```{.coffee .numberLines}
+React = require 'react'
+{LineNumberColumn} = require './columns'
+
+targetElement = document.querySelector '#demoTarget'
+
+viewModel.on 'change', ->
+    virtualElement = React.createElement(LineNumberColumn, value: viewModel.lineNumber)
+    React.render virtualElement, targetElement
 ```
 
 ## Composing Components
