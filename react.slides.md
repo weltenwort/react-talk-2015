@@ -179,52 +179,120 @@ that implements
     \end{column}
 \end{columns}
 
-## Advantages
+## Reconciliation
+
+### DOM diffing and patching rules
+
+* for element lists:
+
+    * pairwise by key if given
+
+    * pairwise by position otherwise
+
+* pairwise comparison
+
+    * different tag type treated as replacements
+
+    * same tag type update attribute by attribute
+
+<!--\begin{figure}
+    \begin{tikzpicture}[
+        %grow via three points={one child at (1,-1) and
+        %two children at (1,-1) and (1,-2)},
+        every node/.append style = dom node,
+        edge from parent/.append style = propagation,
+        dirtree,
+    ]
+        \node {ul(className='planning-object-list')}
+            child { node {li(className='line')}
+                child { node {div(className='violation-line')} }
+                child { node {div(className='entry')} }
+                child { node {ul()} }
+            }
+            child { node {li(className='line')} };
+    \end{tikzpicture}
+\end{figure}-->
 
 
+## Positive Effects
 
-<!--
-      section
-        h2 How does React tacle that?
-        ul
-          li
-            span Cohesive, composable 
-            em components
-          li
-            em Stateless
-            span , 
-            em pure 
-            span render functions
-            ul
-              li
-                span Input: 
-                em state
-                span , 
-                em properties
-              li
-                span Output: 
-                em virtual DOM elements
+Composable
 
-      section
-        .mermaid.
-          graph LR
-            classDef default stroke:#728DA5,stroke-width:2px;
-            linkStyle defaulDEFAULTt stroke:#728DA5,stroke-width:2px;
-            subgraph Model
-              model1(State 1)
-              model2(State 2)
-              model1->model2
-            end
+:   components can be nested
 
-      section
-        pre.line-numbers
-          code.language-coffeescript.
-            bespoke.from 'article', [
-              classes(),
-              keys(),
-              touch(),
-              bullets('li, .bullet')
-            ]
-      section
-        h2 template in my js?
--->
+Cachable
+
+:   return values can be cached safely
+
+Predictable
+
+:   no hidden state
+
+Flexible
+
+:   virtual DOM can be rendered to DOM, string, native widgets, etc...
+
+
+# Examples
+
+## A Simple Component
+
+```{.coffee .numberLines}
+React = require 'react'
+{div} = React.DOM
+
+class LineNumberColumn extends React.Component
+    @propTypes =
+        value: React.PropTypes.number.isRequired
+
+    render: ->
+        div className: 'lineNumber', @props.value
+
+module.exports = {
+    LineNumberColumn
+}
+```
+
+## Composing Components
+
+```{.coffee .numberLines}
+{DOM: {div}} = React = require 'react'
+
+{LineNumberColumn, ExpandColumn, NameColumn} = require './columns'
+
+class TreeRowContent extends React.Component
+    @propTypes =
+        planningObject: React.PropTypes.object.isRequired
+
+    render: ->
+        div className: 'content',
+            div {},
+                React.createElement LineNumberColumn, value: @props.lineNumber
+                div className: 'rowContent',
+                    React.createElement ExpandColumn {}
+                    React.createElement NameColumn value: @props.name
+                    # ...
+```
+
+## Using Flow Control Structures
+
+```{.coffee .numberLines}
+{DOM: {li, ul}} = React = require 'react'
+classNames = require 'classnames'
+
+class TreeRow extends React.Component
+    @propTypes =
+        planningObject: React.PropTypes.object.isRequired
+        level: React.PropTypes.number
+    @defaultProps =
+        level: 0
+    render: ->
+        {planningObject, level} = @props
+        classes = classNames "level-#{level}",
+            hasChildren: planningObject.children.length > 0
+
+        li className: classes,
+            React.createElement TreeRowContent, planningObject: planningObject
+            ul className: 'children', for child in planningObject.children
+                React.createElement TreeRow, planningObject: child, level: @level + 1
+```

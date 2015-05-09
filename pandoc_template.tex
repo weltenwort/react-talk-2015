@@ -7,23 +7,31 @@
 \usetikzlibrary{graphs}
 \usetikzlibrary{positioning}
 \usetikzlibrary{quotes}
+\usetikzlibrary{trees}
 
 \tikzset{
     every node/.style = {
         node distance = 2cm and 5cm,
-        text = white,
         on grid,
     },
     block/.style = {
         rectangle,
         rounded corners,
         fill = mDarkTeal,
-        thick,
         minimum width = 2cm,
         minimum height = 1.6em,
         outer sep = .05cm,
         inner sep = .3em,
         font = \sffamily\small,
+        text = white,
+    },
+    dom node/.style = {
+        rectangle,
+        rounded corners,
+        fill = mDarkTeal,
+        text = white,
+        font = \sffamily\tiny,
+        outer sep = .05cm,
     },
     transition/.style = {
         dashed,
@@ -41,6 +49,35 @@
     },
 }
 
+\makeatletter
+\newcount\dirtree@lvl
+\newcount\dirtree@plvl
+\newcount\dirtree@clvl
+\def\dirtree@growth{%
+  \ifnum\tikznumberofcurrentchild=1\relax
+  \global\advance\dirtree@plvl by 1
+  \expandafter\xdef\csname dirtree@p@\the\dirtree@plvl\endcsname{\the\dirtree@lvl}
+  \fi
+  \global\advance\dirtree@lvl by 1\relax
+  \dirtree@clvl=\dirtree@lvl
+  \advance\dirtree@clvl by -\csname dirtree@p@\the\dirtree@plvl\endcsname
+  \pgf@xa=.3cm\relax
+  \pgf@ya=-.5cm\relax
+  \pgf@ya=\dirtree@clvl\pgf@ya
+  \pgftransformshift{\pgfqpoint{\the\pgf@xa}{\the\pgf@ya}}%
+  \ifnum\tikznumberofcurrentchild=\tikznumberofchildren
+  \global\advance\dirtree@plvl by -1
+  \fi
+}
+\tikzset{
+  dirtree/.style={
+    growth function=\dirtree@growth,
+    every node/.append style={anchor=north},
+    every child node/.append style={anchor=west},
+    edge from parent path={(\tikzparentnode\tikzparentanchor) |- (\tikzchildnode\tikzchildanchor)}
+  }
+}
+\makeatother
 
 %\setbeameroption{show notes on second screen}
 
@@ -89,6 +126,7 @@ $if(lhs)$
 $endif$
 $if(highlighting-macros)$
 $highlighting-macros$
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\},fontsize=\footnotesize}
 $endif$
 $if(verbatim-in-note)$
 \usepackage{fancyvrb}
