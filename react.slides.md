@@ -20,39 +20,13 @@
 
 * a **view library**
 
-. . .
-
 that implements
 
 * a **virtual DOM**
 
 * a **DOM diffing** and **patching** algorithm
 
-# Simplicity
-
-## Simplicity -- Reducing Cognitive Load
-
-> [...] we should do (as wise programmers aware of our limitations) our utmost
-> to **shorten the conceptual gap between the static program and the dynamic
-> process**, to make the correspondence between the program (spread out in text
-> space) and the process (spread out in time) as trivial as possible. 
-
---- E.W. Dijkstra (1968) "A Case against the GO TO Statement"
-
-<!--\note[item]{Our intellectual powers are rather geared to master static relations and that our powers to visualize processes evolving in time are relatively poorly developed. For that reason we should do (as wise programmers aware of our limitations) our utmost to shorten the conceptual gap between the static program and the dynamic process, to make the correspondence between the program (spread out in text space) and the process (spread out in time) as trivial as possible.}-->
-
-## Simplicity -- Predictability -- Robustness
-
-* less context to keep in mind
-
-    * fewer mistakes
-
-    * fewer bugs
-
-* easier to **learn**
-
-* easier to **adapt**
-
+# Motivation
 
 ## What makes Web Interfaces Complex?
 
@@ -127,9 +101,59 @@ that implements
     \end{tikzpicture}
 \end{figure}
 
+## The Problem
+
+* Complexity of **state** and **transitions**
+
+* Tight **coupling** of
+
+    * ViewModel
+
+    * Presenter
+
+    * View
+
+    * Template
+
+    * DOM
+
+* Impedes
+
+    * Reusability
+
+    * Testability
+
+    * Predictability
+
+
+## Simplicity -- Reducing Cognitive Load
+
+> [...] we should do (as wise programmers aware of our limitations) our utmost
+> to **shorten the conceptual gap between the static program and the dynamic
+> process**, to make the correspondence between the program (spread out in text
+> space) and the process (spread out in time) as trivial as possible. 
+
+--- E.W. Dijkstra (1968) "A Case against the GO TO Statement"
+
+
+## Simplicity -- Predictability -- Robustness
+
+* less context to keep in mind
+
+* fewer mistakes
+
+* fewer bugs
+
+* easier to learn
+
+* easier to adapt
+
+
 # How can React help?
 
 ## Simplify Web Interfaces
+
+### Re-render everything in case of changes
 
 * Minimize redundant and scattered state
 
@@ -354,7 +378,7 @@ class TreeRow extends React.Component
 * Can be rendered server-side to reduce initial load time
 
 
-## Additional Optimizations
+## Additional Optimizations: Render Tree Pruning
 
 ### `shouldComponentUpdate()`{.coffee}
 
@@ -366,4 +390,33 @@ class TreeRow extends React.Component
 
 * If it returns `false`{.coffee}, the previous virtual DOM is reused
 
-* Can be combined with immutable data structures for $O(1)$ equality checks
+```{.coffee .numberLines}
+class LineNumberColumn extends React.Component
+    shouldComponentUpdate: (newProps, newState) ->
+        newProps.value isnt @props.value
+
+    render: ->
+        div className: 'lineNumber', @props.value
+```
+
+
+## Additional Optimizations: Immutable State
+
+### Immutable State
+
+* Pass state and properties as **immutable data structures**, e.g. Facebook's Immutable.js
+
+* $O(1)$ equality checks of arbitrarily complex objects
+
+* Easier reasoning about state changes
+
+```{.coffee .numberLines}
+class TreeRowContent extends React.Component
+    shouldComponentUpdate: (newProps, newState) ->
+        not Immutable.is newProps.planningObject, @props.planningObject
+
+    render: ->
+        # ...
+```
+
+# Questions, Please -- Thank You
