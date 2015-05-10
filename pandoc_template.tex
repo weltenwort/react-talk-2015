@@ -8,6 +8,7 @@
 \usetikzlibrary{positioning}
 \usetikzlibrary{quotes}
 \usetikzlibrary{trees}
+\usetikzlibrary{scopes}
 
 \tikzset{
     every node/.style = {
@@ -37,10 +38,22 @@
         dashed,
         mLightBrown,
         thick,
+        every edge quotes/.style = {
+            black,
+            auto,
+        }
+    },
+    implicit transition/.style = {
+        transition,
+        dotted,
     },
     propagation/.style = {
         mLightBrown,
         thick,
+        every edge quotes/.style = {
+            black,
+            auto,
+        }
     },
     invisible/.style={opacity=0},
     visible on/.style={alt={#1{}{invisible}}},
