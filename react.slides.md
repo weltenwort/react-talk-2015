@@ -69,7 +69,7 @@ that implements
         \node (presenter1) [block, below=of model1] {Presenter};
         \node (presenter2) [block, below=of model2] {Presenter};
 
-        \node (view1) [block, below=1cm of presenter1] {View State 2};
+        \node (view1) [block, below=1cm of presenter1] {View State 1};
         \node (view2) [block, below=1cm of presenter2] {View State 2};
 
         \node (dom1) [block, below=1cm of view1] {DOM State 1};
@@ -295,7 +295,7 @@ React = require 'react'
 {div} = React.DOM
 
 class LineNumberColumn extends React.Component
-    @propTypes =
+    @propTypes:
         value: React.PropTypes.number.isRequired
 
     render: ->
@@ -327,17 +327,37 @@ viewModel.on 'change', ->
 {LineNumberColumn, ExpandColumn, NameColumn} = require './columns'
 
 class TreeRowContent extends React.Component
-    @propTypes =
+    @propTypes:
         planningObject: React.PropTypes.object.isRequired
 
     render: ->
+        {planningObject} = @props
         div className: 'content',
             div {},
-                React.createElement LineNumberColumn, value: @props.lineNumber
+                React.createElement LineNumberColumn, value: planningObject.lineNumber
                 div className: 'rowContent',
                     React.createElement ExpandColumn {}
-                    React.createElement NameColumn value: @props.name
+                    React.createElement NameColumn value: planningObject.name
                     # ...
+```
+
+## Reacting To User Actions
+
+```{.coffee .numberLines}
+React = require 'react'
+{button} = React.DOM
+
+class CounterButton extends React.Component
+    constructor: (props) ->
+        @state =
+            counter: 0
+
+    increment: =>
+        @setState
+            counter: @state.counter + 1
+
+    render: ->
+        button onClick: @increment, "Counter: #{@state.counter}"
 ```
 
 ## Using Flow Control Structures
@@ -347,10 +367,10 @@ class TreeRowContent extends React.Component
 classNames = require 'classnames'
 
 class TreeRow extends React.Component
-    @propTypes =
+    @propTypes:
         planningObject: React.PropTypes.object.isRequired
         level: React.PropTypes.number
-    @defaultProps =
+    @defaultProps:
         level: 0
     render: ->
         {planningObject, level} = @props
